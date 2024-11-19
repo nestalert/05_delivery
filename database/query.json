@@ -1,9 +1,9 @@
 {
-  "UID": 8,
-  "UNAME": "newUser",
-  "PWD": "ec6277bd100233387a20d4b00929cdf262924f65d5b88aecb083e288f00ebbee",
-  "EMAIL": "YouManYou",
-  "ADDR": "102 Test Road",
+  "UID": 5,
+  "UNAME": "Mark50",
+  "PWD": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
+  "EMAIL": "markymark@bmail.com",
+  "ADDR": "2 FAKE ROAD",
   "ROLE": "DELIVERER",
-  "BANK_TOKEN": "134387971324eq31"
+  "BANK_TOKEN": "c9950ebb3cc63b"
 }

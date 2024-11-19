@@ -1,0 +1,125 @@
+-- Drop the database if it already exists
+DROP DATABASE IF EXISTS userbase;
+
+-- Create the new database
+CREATE DATABASE userbase;
+
+-- Use the newly created database
+USE userbase;
+
+-- Create a USERS table for common attributes
+CREATE TABLE USERS
+(
+    UID INT NOT NULL AUTO_INCREMENT,
+    UNAME VARCHAR(50) NOT NULL UNIQUE,
+    PWD   VARCHAR(255) NOT NULL,  -- Store hashed passwords
+    EMAIL VARCHAR(254),
+    ADDR  VARCHAR(100),
+    ROLE  VARCHAR(50) NOT NULL DEFAULT "CUSTOMER",
+    BANK_TOKEN VARCHAR(50),
+    PRIMARY KEY(UID)
+);
+
+-- Create the CUSTOMERS table with specific attributes
+CREATE TABLE CUSTOMERS
+(
+    UID INT,
+    LOYALTY_POINTS INT DEFAULT 0,
+    PREFERRED_PAYMENT_METHOD VARCHAR(50),
+    ORDER_HISTORY INT DEFAULT 0,
+    RATING DECIMAL(3, 2) DEFAULT NULL, -- Rating out of 5
+    FOREIGN KEY (UID) REFERENCES USERS(UID) ON DELETE CASCADE,
+    PRIMARY KEY(UID)
+);
+
+-- Create the KITCHENS table with specific attributes
+CREATE TABLE KITCHENS
+(
+    UID INT,
+    CUISINE_TYPE VARCHAR(50),
+    AVERAGE_PREPARATION_TIME TIME DEFAULT NULL,
+    RATING DECIMAL(3, 2) DEFAULT NULL, -- Rating out of 5
+    ACTIVE_STATUS BOOLEAN DEFAULT TRUE,
+    START_HOUR TIME DEFAULT NULL,
+    END_HOUR   TIME DEFAULT NULL,
+    FOREIGN KEY (UID) REFERENCES USERS(UID) ON DELETE CASCADE,
+    PRIMARY KEY(UID)
+);
+
+-- Create the DELIVERERS table with specific attributes
+CREATE TABLE DELIVERERS
+(
+    UID INT,
+    VEHICLE_TYPE VARCHAR(50),
+    DELIVERY_COUNT INT DEFAULT 0,
+    AVERAGE_RATING DECIMAL(3, 2) DEFAULT NULL, -- Rating out of 5
+    WORKING_REGION VARCHAR(100),
+    START_HOUR TIME DEFAULT NULL,
+    END_HOUR   TIME DEFAULT NULL,
+    FOREIGN KEY (UID) REFERENCES USERS(UID) ON DELETE CASCADE,
+    PRIMARY KEY(UID)
+);
+
+-- Create the MENU table associated with KITCHENS
+CREATE TABLE MENU
+(
+    UID INT,
+    MENU_ID INT,
+    FOOD_NAME VARCHAR(50),
+    FOOD_ALLERGENS VARCHAR(100), 
+    PRICE DECIMAL(10,2),
+    PRIMARY KEY(UID, MENU_ID),
+    FOREIGN KEY (UID) REFERENCES KITCHENS(UID) ON DELETE CASCADE
+);
+
+-- Create the ORDERS table to track orders
+CREATE TABLE ORDERS
+(
+    ORDER_ID INT NOT NULL AUTO_INCREMENT,
+    CUSTOMER_ID INT,
+    KITCHEN_ID INT,
+    DELIVERER_ID INT,
+    ORDER_DATE DATETIME DEFAULT CURRENT_TIMESTAMP,
+    STATUS VARCHAR(50) DEFAULT "PENDING",
+    TOTAL_AMOUNT DECIMAL(10, 2),
+    PRIMARY KEY(ORDER_ID),
+    FOREIGN KEY (CUSTOMER_ID) REFERENCES CUSTOMERS(UID) ON DELETE SET NULL,
+    FOREIGN KEY (KITCHEN_ID) REFERENCES KITCHENS(UID) ON DELETE SET NULL,
+    FOREIGN KEY (DELIVERER_ID) REFERENCES DELIVERERS(UID) ON DELETE SET NULL
+);
+
+-- Insert sample data into USERS table
+INSERT INTO USERS (UNAME, PWD, EMAIL, ADDR, ROLE, BANK_TOKEN) VALUES
+    ("MJones", SHA2('doc4life', 256), "MJones@bmail.com", "63 HIGH ROAD", 'CUSTOMER', "d3a05cd93c75c814"),
+    ("RTRules", SHA2('214657890', 256), "roller@coldmail.com", "1ST & 1ST", 'CUSTOMER', "b4c20e637f9c8aef"),
+    ("La_Pizzeria", SHA2('PJ3e43hd!@#', 256), "help@lapizzeria.gr", "99 LIBERTY AVE.", 'KITCHEN', "13f5faecc0d7c50a"),
+    ("Joes_Souvlaki", SHA2('goodstuff1975', 256), "joes134@pixapost.com", "16 COOPER STR.", 'KITCHEN', "ff698538eb5a3a7"),
+    ("Mark50", SHA2('123456', 256), "markymark@bmail.com", "2 FAKE ROAD", 'DELIVERER', "c9950ebb3cc63b"),
+    ("El1te", SHA2('El1te', 256), "el1te@inlook.com", "41 P WALLABY STR.", 'DELIVERER', "3682198954a21");
+
+-- Insert sample data into CUSTOMERS, KITCHENS, and DELIVERERS tables
+INSERT INTO CUSTOMERS (UID, LOYALTY_POINTS, PREFERRED_PAYMENT_METHOD, ORDER_HISTORY, RATING) VALUES
+    (1, 150, 'Credit Card', 10, 4.5),
+    (2, 85, 'PayPal', 5, 4.7);
+    
+INSERT INTO KITCHENS (UID, CUISINE_TYPE, AVERAGE_PREPARATION_TIME, RATING, START_HOUR, END_HOUR) VALUES
+    (3, 'Italian', '00:30:00', 4.8, "12:00:00", "23:59:59"),
+    (4, 'Greek', '00:20:00', 4.6, "09:00:00", "22:00:00");
+    
+INSERT INTO DELIVERERS (UID, VEHICLE_TYPE, DELIVERY_COUNT, AVERAGE_RATING, WORKING_REGION, START_HOUR, END_HOUR) VALUES
+    (5, 'Bike', 120, 4.9, 'Downtown', "12:00:00", "23:00:00"),
+    (6, 'Car', 200, 4.8, 'Suburbs', "14:00:00", "02:00:00");
+
+-- Insert sample data into MENU table for the kitchens
+INSERT INTO MENU (UID, MENU_ID, FOOD_NAME, FOOD_ALLERGENS, PRICE) VALUES
+    (3, 1, "Pepperoni Pizza", NULL, 10.95),
+    (3, 2, "Shrimp Pasta", "Shellfish",15.95),
+    (3, 3, "Pine Nut Pizza", "Nuts",18.99),
+    (4, 1, "Pork Souvlaki", "Onion",3.60),
+    (4, 2, "Greek Salad", "Feta cheese",2.20),
+    (4, 3, "French Fries", NULL,1.50);
+
+-- Insert sample orders
+INSERT INTO ORDERS (CUSTOMER_ID, KITCHEN_ID, DELIVERER_ID, TOTAL_AMOUNT) VALUES
+    (1, 3, 5, 25.99),
+    (2, 4, 6, 15.50);

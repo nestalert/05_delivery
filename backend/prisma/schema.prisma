@@ -1,0 +1,84 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model customers {
+  UID                      Int      @id
+  LOYALTY_POINTS           Int?     @default(0)
+  PREFERRED_PAYMENT_METHOD String?  @db.VarChar(50)
+  ORDER_HISTORY            Int?     @default(0)
+  RATING                   Decimal? @db.Decimal(3, 2)
+  users                    users    @relation(fields: [UID], references: [UID], onDelete: Cascade, onUpdate: Restrict, map: "customers_ibfk_1")
+  orders                   orders[]
+}
+
+model deliverers {
+  UID            Int       @id
+  VEHICLE_TYPE   String?   @db.VarChar(50)
+  DELIVERY_COUNT Int?      @default(0)
+  AVERAGE_RATING Decimal?  @db.Decimal(3, 2)
+  WORKING_REGION String?   @db.VarChar(100)
+  START_HOUR     DateTime? @db.Time(0)
+  END_HOUR       DateTime? @db.Time(0)
+  users          users     @relation(fields: [UID], references: [UID], onDelete: Cascade, onUpdate: Restrict, map: "deliverers_ibfk_1")
+  orders         orders[]
+}
+
+model kitchens {
+  UID                      Int       @id
+  CUISINE_TYPE             String?   @db.VarChar(50)
+  AVERAGE_PREPARATION_TIME DateTime? @db.Time(0)
+  RATING                   Decimal?  @db.Decimal(3, 2)
+  ACTIVE_STATUS            Boolean?  @default(true)
+  START_HOUR               DateTime? @db.Time(0)
+  END_HOUR                 DateTime? @db.Time(0)
+  users                    users     @relation(fields: [UID], references: [UID], onDelete: Cascade, onUpdate: Restrict, map: "kitchens_ibfk_1")
+  menu                     menu[]
+  orders                   orders[]
+}
+
+model menu {
+  UID            Int
+  MENU_ID        Int
+  FOOD_NAME      String?  @db.VarChar(50)
+  FOOD_ALLERGENS String?  @db.VarChar(100)
+  PRICE          Decimal? @db.Decimal(10, 2)
+  kitchens       kitchens @relation(fields: [UID], references: [UID], onDelete: Cascade, onUpdate: Restrict, map: "menu_ibfk_1")
+
+  @@id([UID, MENU_ID])
+}
+
+model orders {
+  ORDER_ID     Int         @id @default(autoincrement())
+  CUSTOMER_ID  Int?
+  KITCHEN_ID   Int?
+  DELIVERER_ID Int?
+  ORDER_DATE   DateTime?   @default(now()) @db.DateTime(0)
+  STATUS       String?     @default("PENDING") @db.VarChar(50)
+  TOTAL_AMOUNT Decimal?    @db.Decimal(10, 2)
+  customers    customers?  @relation(fields: [CUSTOMER_ID], references: [UID], onUpdate: Restrict, map: "orders_ibfk_1")
+  kitchens     kitchens?   @relation(fields: [KITCHEN_ID], references: [UID], onUpdate: Restrict, map: "orders_ibfk_2")
+  deliverers   deliverers? @relation(fields: [DELIVERER_ID], references: [UID], onUpdate: Restrict, map: "orders_ibfk_3")
+
+  @@index([CUSTOMER_ID], map: "CUSTOMER_ID")
+  @@index([DELIVERER_ID], map: "DELIVERER_ID")
+  @@index([KITCHEN_ID], map: "KITCHEN_ID")
+}
+
+model users {
+  UID        Int         @id @default(autoincrement())
+  UNAME      String      @db.VarChar(50)
+  PWD        String      @db.VarChar(255)
+  EMAIL      String?     @db.VarChar(254)
+  ADDR       String?     @db.VarChar(100)
+  ROLE       String      @default("CUSTOMER") @db.VarChar(50)
+  BANK_TOKEN String?     @db.VarChar(50)
+  customers  customers?
+  deliverers deliverers?
+  kitchens   kitchens?
+}
