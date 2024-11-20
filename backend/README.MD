@@ -1,2 +1,2 @@
 to start:
-npx tsx <filename>
+node server.js
