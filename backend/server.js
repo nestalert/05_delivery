@@ -15,22 +15,24 @@ const prisma = new PrismaClient();
 app.use(cors());
 app.use(bodyParser.json());
 
-app.get('/users/:username', async (req, res) => {
-  const { username } = req.params;
-
+app.get('/users/:username/:password', async (req, res) => {
+  const { username,password } = req.params;
+  console.log("> Requested: " + username);
   try {
     const users = await prisma.users.findFirst({
         where: {
             UNAME: username,
+            PWD: password,
           },
     });
 
     if (!users) {
-      return res.status(404).json({  
- error: 'User not found' });
+      console.log("> Rejected: " + username);
+      return res.status(404).json({error: 'Incorrect username or password' });
     }
 
     res.json(users);
+    console.log("> Validated: " + username);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error:  
@@ -38,30 +40,30 @@ app.get('/users/:username', async (req, res) => {
   }
 });
 
-const fs = require('fs');
-
-app.get('/create', async (req, res) => {
+app.post('/create/:json', async (req, res) => {
+  const { json } = req.params;
+  console.log("> Attempted creation")
   try {
-    const fileContent = fs.readFileSync('../user.json', 'utf-8').split('\r\n');
-    const [username, temppass, email, address, role, bankToken] = fileContent;
-    const password = crypto.createHash('sha256').update(temppass).digest('hex');
+    const userData = JSON.parse(json);
+    const { username, hash, email, address, role,token } = userData;
     const newUser = await prisma.users.create({
-        data: {
-          UNAME: username,
-          PWD: password,
-          EMAIL: email,
-          ADDR: address,
-          ROLE: role,
-          BANK_TOKEN: bankToken,
-        },
+      data: {
+        UNAME: username,
+        PWD: hash,
+        EMAIL: email,
+        ADDR: address,
+        ROLE: role,
+        BANK_TOKEN: token,
+      },
     });
+
     res.json(newUser);
+    console.log("> Created user: " + username);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Error creating user' });
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
-
 
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);

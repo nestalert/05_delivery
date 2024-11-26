@@ -1,0 +1,63 @@
+.order-page {
+  font-family: 'Arial', sans-serif;
+  padding: 20px;
+  text-align: center;
+  background-color: #f9f9f9;
+}
+
+header h2 {
+  color: #ff6f61;
+  font-size: 2rem;
+}
+
+.food-list,
+.cart-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.food-list li,
+.cart-list li {
+  margin: 10px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+button {
+  padding: 5px 10px;
+  font-size: 1rem;
+  color: white;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-left: 5px;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+.back-home {
+  margin-top: 20px;
+  background-color: #6c757d;
+}
+
+footer {
+  margin-top: 20px;
+}
+
+h3 {
+  color: #333;
+}
+
+.cart-list span {
+  font-weight: bold;
+}
+
+h3.total {
+  margin-top: 20px;
+  font-size: 1.5rem;
+  color: #444;
+}

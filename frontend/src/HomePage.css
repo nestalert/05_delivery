@@ -1,0 +1,50 @@
+.home-page {
+    text-align: center;
+    padding: 50px;
+    font-family: 'Arial', sans-serif;
+    background-color: #f9f9f9;
+  }
+  
+  .home-gif {
+    width: 150px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+  }
+  
+  h1 {
+    color: #ff6f61;
+    font-size: 2.5rem;
+  }
+  
+  p {
+    color: #6c757d;
+    font-size: 1.2rem;
+  }
+  
+  .home-buttons {
+    margin-top: 30px;
+  }
+  
+  button {
+    padding: 10px 20px;
+    margin: 0 10px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .login-button {
+    background-color: #ff6f61;
+    color: white;
+  }
+  
+  .create-account-button {
+    background-color: #28a745;
+    color: white;
+  }
+  
+  button:hover {
+    opacity: 0.8;
+  }
+  

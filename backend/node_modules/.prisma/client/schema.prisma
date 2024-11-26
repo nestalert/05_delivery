@@ -72,7 +72,7 @@ model orders {
 
 model users {
   UID        Int         @id @default(autoincrement())
-  UNAME      String      @db.VarChar(50)
+  UNAME      String      @unique(map: "UNAME") @db.VarChar(50)
   PWD        String      @db.VarChar(255)
   EMAIL      String?     @db.VarChar(254)
   ADDR       String?     @db.VarChar(100)
