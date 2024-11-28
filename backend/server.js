@@ -65,6 +65,63 @@ app.post('/create/:json', async (req, res) => {
   }
 });
 
+app.get('/menu/', async (req, res) => {
+  const { kitchen } = req.params;
+  console.log("> Listing restaurants...");
+  try {
+    const users = await prisma.users.findMany({
+        where: {
+            ROLE: "KITCHEN",
+          },
+            select: {
+            UID: true,
+            UNAME: true,
+          },
+    
+    });
+    res.json(users);
+    if (!users) {
+      return res.status(404).json({error: 'Incorrect username or password' });
+    }
+    
+    console.log("> Found restaurants");
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error:  
+ 'Internal server error' });
+  }
+});
+
+app.get('/menu/:kitchen', async (req, res) => {
+  const { kitchen } = req.params;
+  console.log("> Sending menu of kitchen : " + kitchen);
+  try {
+    const findkitchen = await prisma.users.findFirst({
+        where: {
+            UNAME: kitchen,
+          },
+    
+    });
+      const uid = findkitchen.UID;
+      const users = await prisma.menu.findMany({
+        where: {
+            UID: uid,
+          },
+    })
+    res.json(users);
+    if (!users) {
+      console.log("> Rejected: " + username);
+      return res.status(404).json({error: 'Incorrect username or password' });
+    }
+    
+    console.log("> Found menu: " + kitchen);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error:  
+ 'Internal server error' });
+  }
+});
+
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
 });
