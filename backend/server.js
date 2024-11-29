@@ -15,23 +15,23 @@ const prisma = new PrismaClient();
 app.use(cors());
 app.use(bodyParser.json());
 
-app.get('/order/:username/:password', async (req, res) => {
+app.get('/users/:username/:password', async (req, res) => {
   const { username,password } = req.params;
   console.log("> Requested: " + username);
   try {
-    const order = await prisma.order.findFirst({
+    const user = await prisma.users.findFirst({
         where: {
             UNAME: username,
             PWD: password,
           },
     });
 
-    if (!order) {
+    if (!user) {
       console.log("> Rejected: " + username);
       return res.status(404).json({error: 'Incorrect username or password' });
     }
 
-    res.json(order);
+    res.json(user);
     console.log("> Validated: " + username);
   } catch (error) {
     console.error(error);
@@ -55,7 +55,7 @@ app.post('/create/:json', async (req, res) => {
       throw new Error("Invalid role. Only CUSTOMER, DELIVERER, or KITCHEN allowed.");
     }
 
-    const newOrder = await prisma.order.create({
+    const newUser = await prisma.users.create({
       data: {
         UNAME: username,
         PWD: hash,
@@ -66,7 +66,7 @@ app.post('/create/:json', async (req, res) => {
       },
     });
 
-    res.json(newOrder);
+    res.json(newUser);
     console.log("> Created user: " + username);
   } catch (error) {
     console.error(error);
@@ -100,7 +100,7 @@ app.patch('/update/:uid/:json', async (req, res) => {
     if (address) updateData.ADDR = address;
     if (uppercaseRole) updateData.ROLE = uppercaseRole;
 
-    const updatedUser = await prisma.order.update({
+    const updatedUser = await prisma.users.update({
       where: {
         ID: parseInt(uid), // Ensure uid is converted to an integer
       },
@@ -123,7 +123,7 @@ app.get('/menu/', async (req, res) => {
   const { kitchen } = req.params;
   console.log("> Listing restaurants...");
   try {
-    const order = await prisma.order.findMany({
+    const menu = await prisma.users.findMany({
         where: {
             ROLE: "KITCHEN",
           },
@@ -133,8 +133,8 @@ app.get('/menu/', async (req, res) => {
           },
     
     });
-    res.json(order);
-    if (!order) {
+    res.json(menu);
+    if (!menu) {
       return res.status(404).json({error: 'Incorrect username or password' });
     }
     
@@ -150,20 +150,20 @@ app.get('/menu/:kitchen', async (req, res) => {
   const { kitchen } = req.params;
   console.log("> Sending menu of kitchen : " + kitchen);
   try {
-    const findkitchen = await prisma.order.findFirst({
+    const findkitchen = await prisma.users.findFirst({
         where: {
             UNAME: kitchen,
           },
     
     });
       const uid = findkitchen.UID;
-      const order = await prisma.menu.findMany({
+      const menu = await prisma.menu.findMany({
         where: {
             UID: uid,
           },
     })
-    res.json(order);
-    if (!order) {
+    res.json(menu);
+    if (!menu) {
       console.log("> Rejected: " + username);
       return res.status(404).json({error: 'Incorrect username or password' });
     }
