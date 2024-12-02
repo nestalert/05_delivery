@@ -17,6 +17,7 @@ function RestaurantDropdown() {
 
   const handleSelect = (event) => {
     setSelectedRestaurant(event.target.value);
+    setRestaurantMenu(null); // Reset menu when a new restaurant is selected
   };
 
   const handleSubmit = async () => {
@@ -39,6 +40,19 @@ function RestaurantDropdown() {
         ))}
       </select>
       <button onClick={handleSubmit}>Submit</button>
+
+      {/* Conditionally render the restaurant menu */}
+      {restaurantMenu && (
+        <div>
+          <h3>Menu</h3>
+          {/* Display the menu data here based on its structure */}
+          <ul>
+            {restaurantMenu.map((menuItem) => (
+              <li key={menuItem.UID}>{menuItem.FOOD_NAME} - {menuItem.PRICE}</li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 }
