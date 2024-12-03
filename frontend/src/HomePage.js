@@ -8,11 +8,11 @@ function HomePage() {
   return (
     <div className="home-page">
       <img
-        src="/spider-man2-spider-man.gif"
-        alt="Delivery GIF"
-        className="home-gif"
+        src="/logo.png"
+        alt="Delivery logo"
+        className="home-logo"
       />
-      <h1>Welcome to FoodExpress</h1>
+      <h1>Welcome to UNIWA eats</h1>
       <p>Your favorite meals delivered fresh to your doorstep!</p>
       <div className="home-buttons">
         <button onClick={() => navigate('/login')} className="login-button">
