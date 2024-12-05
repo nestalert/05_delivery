@@ -36,7 +36,7 @@ function CreateAccountPage() {
       token
     };
     try {
-      const response = await fetch('http://localhost:8080/create/' + JSON.stringify(userData), {
+      const response = await fetch('http://localhost:8080/users/create/' + JSON.stringify(userData), {
         method: 'POST'
       });
 

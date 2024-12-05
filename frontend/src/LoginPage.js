@@ -3,19 +3,20 @@ import { useNavigate } from 'react-router-dom';
 import './LoginPage.css';
 import CryptoJS from 'crypto-js';
 
+
 function LoginPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const hash = CryptoJS.SHA256(password).toString();
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState(null); // State for error message
+ 
 
   const handleLogin = async (e) => {
     e.preventDefault();
-
     // Check user existence before proceeding
     try {
-      const response = await fetch(`http://localhost:8080/users/${username}/${hash}`);
+      const response = await fetch(`http://localhost:8080/login/${username}/${hash}`);
       if (!response.ok) {
         // Handle 404 error
         if (response.status === 404) {
@@ -25,13 +26,17 @@ function LoginPage() {
         }
         return;
       }
+      else {
+        const data = await response.json();
+        console.log(data.token);
+        localStorage.setItem('token', data.token);
+        navigate('/order', { state: { username } });
+      }
     } catch (error) {
       console.error('Error fetching user:', error);
       setErrorMessage('An error occurred during login.');
       return;
     }
-
-    navigate('/order', { state: { username } });
   };
 
   useEffect(() => {
@@ -70,4 +75,4 @@ function LoginPage() {
   );
 }
 
-export default LoginPage;
+export default LoginPage;   
