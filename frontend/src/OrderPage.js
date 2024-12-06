@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+const token = localStorage.getItem('token');
 
 function RestaurantDropdown() {
   const [restaurants, setRestaurants] = useState([]);
@@ -7,7 +8,12 @@ function RestaurantDropdown() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch('http://localhost:8080/menu/');
+      console.log(token);
+      const response = await fetch(`http://localhost:8080/menu/`, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    });
       const data = await response.json();
       setRestaurants(data);
     };
@@ -22,7 +28,11 @@ function RestaurantDropdown() {
 
   const handleSubmit = async () => {
     if (selectedRestaurant) {
-      const response = await fetch(`http://localhost:8080/menu/${selectedRestaurant}`);
+      const response = await fetch(`http://localhost:8080/menu/${selectedRestaurant}`, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    });
       const data = await response.json();
       setRestaurantMenu(data);
     }
