@@ -12,18 +12,17 @@ function tokenGenerate(length) {
     result += characters.charAt(randomIndex);
   }
   return result;  
-
 }
 
 function CreateAccountPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');  
-
   const [address, setAddress] = useState('');
-  const [role, setRole] = useState('');  
+  const [role, setRole] = useState('customer');  // Default role set to "customer"
   const token = tokenGenerate(15);
   const navigate = useNavigate();
+
   const handleCreateAccount = async (e) => {
     e.preventDefault();
     const hash = CryptoJS.SHA256(password).toString();
@@ -35,21 +34,19 @@ function CreateAccountPage() {
       role,
       token
     };
+
     try {
       const response = await fetch('http://localhost:8080/create/' + JSON.stringify(userData), {
         method: 'POST'
       });
 
       if (response.ok) {
-        // Handle successful response, e.g., navigate to a different page
         navigate('/order', { state: { username } });
       } else {
-        // Handle error response, e.g., display an error message
         console.error('Error creating account:', response.statusText);
       }
     } catch (error) {
       console.error('Error creating account:', error);  
-
     }
   };
 
@@ -95,12 +92,26 @@ function CreateAccountPage() {
         </label>
         <label>
           Role:
-          <input
-            type="text"
-            value={role}
-            onChange={(e) => setRole(e.target.value)}
-            required
-          />
+          <div className="role-selection">
+            <label>
+              <input
+                type="radio"
+                value="customer"
+                checked={role === 'customer'}
+                onChange={(e) => setRole(e.target.value)}
+              />
+              Customer
+            </label>
+            <label>
+              <input
+                type="radio"
+                value="kitchen"
+                checked={role === 'kitchen'}
+                onChange={(e) => setRole(e.target.value)}
+              />
+              Kitchen
+            </label>
+          </div>
         </label>
         <p>A bank token will be generated automatically.</p>
         <button type="submit">Create Account</button>
