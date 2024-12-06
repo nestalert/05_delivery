@@ -1,7 +1,6 @@
 const express = require('express');
 const  { PrismaClient } = require('@prisma/client');
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
 
 const config = require('./config');
 const middleware = require('./middleware');
@@ -13,7 +12,6 @@ const prisma = new PrismaClient();
 const app = express();
 const port = config.port;
 const secretKey = 'd1acb9602970513209590380d15c33f42a7728d9395c775bc571c9d6bc49850c';
-const token = middleware.verifyToken;
 
 app.use(middleware.corsMiddleware);
 app.use(middleware.bodyParserMiddleware);
