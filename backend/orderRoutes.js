@@ -63,6 +63,22 @@ router.get('/:choice/:uid', async (req, res) => {
       }
   });
 
+router.get('/options/:uid', async (req, res) => {
+    const { uid } = req.params;
+    console.log("> Delivery options")
+    try {
+      const orders = await prisma.orders.findMany({
+          where: {
+          STATUS: "PENDING"
+        }
+      });
+      res.json(orders);
+  } catch (error) {
+      console.error('Error fetching orders:', error);
+      res.status(500).json({ error: 'Failed to fetch orders' });
+  }
+  });
+
 router.post('/create/:json', async (req, res) => {
     const { json } = req.params;
     console.log("> Attempted creation of order");
