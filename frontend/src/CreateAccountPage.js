@@ -110,6 +110,15 @@ function CreateAccountPage() {
                 onChange={(e) => setRole(e.target.value)}
               />
               Kitchen
+              </label>
+            <label>
+              <input
+                type="radio"
+                value="delivery"
+                checked={role === 'delivery'}
+                onChange={(e) => setRole(e.target.value)}
+              />
+              Delivery Man
             </label>
           </div>
         </label>

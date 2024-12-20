@@ -1,7 +1,7 @@
 .App {
   text-align: center;
   font-family: Arial, sans-serif;
-  background-color: #f8f8f8;
+  background-color: #1313dd;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -19,7 +19,7 @@ h1 {
 }
 
 p {
-  color: #555;
+  color: #0a0a0a;
   font-size: 1.2rem;
   margin-bottom: 20px;
 }
