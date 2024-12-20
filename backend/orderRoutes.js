@@ -63,8 +63,7 @@ router.get('/:choice/:uid', async (req, res) => {
       }
   });
 
-router.get('/options/:uid', async (req, res) => {
-    const { uid } = req.params;
+router.get('/options/', async (req, res) => {
     console.log("> Delivery options")
     try {
       const orders = await prisma.orders.findMany({
