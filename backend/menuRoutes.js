@@ -6,7 +6,7 @@ const token = middleware.verifyToken;
 const prisma = new PrismaClient();
 
 const router = express.Router();
-//router.use(token);
+router.use(token);
 
 router.get('/', async (req, res) => {
     const { kitchen } = req.params;

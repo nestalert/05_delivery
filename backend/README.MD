@@ -3,6 +3,7 @@ Check the console of the backend, it prints out whether the call worked or not.
 API:
 (All calls are precedeed with the server name, e.g. localhost:8080)
 
+GET (login/:username/:password): Checks if user exists, then sends back a verification token and role. This is the only API you can call without a token.
 
 GET (/users/:username/:password): Checks if user exists, then sends all user data to the server. Note: password needs to be encrypted with SHA256.
 
