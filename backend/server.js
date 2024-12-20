@@ -41,11 +41,45 @@ app.get('/login/:username/:password', async (req, res) => {
       }
 
       const token = generateToken(user.UID); // Generate token using user's ID
-      res.json({token});
+      res.json({ token, role: user.ROLE });
       console.log('> Logging in '+ user.UNAME + '...');
   } catch (error) {
       console.error(error);
       res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+app.post('/newuser/:json', async (req, res) => {
+  const { json } = req.params;
+  console.log("> Attempted creation of user");
+  try {
+    const userData = JSON.parse(json);
+    const { username, hash, email, address, role, token } = userData;
+
+    // Convert role to uppercase before checking
+    const uppercaseRole = role.toUpperCase();
+
+    // Check if role is valid
+    if (!["CUSTOMER", "DELIVERER", "KITCHEN"].includes(uppercaseRole)) {
+      throw new Error("Invalid role. Only CUSTOMER, DELIVERER, or KITCHEN allowed.");
+    }
+
+    const newUser = await prisma.users.create({
+      data: {
+        UNAME: username,
+        PWD: hash,
+        EMAIL: email,
+        ADDR: address,
+        ROLE: uppercaseRole, // Store role in uppercase
+        BANK_TOKEN: token,
+      },
+    });
+
+    res.json(newUser);
+    console.log("> Created user: " + username);
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ error: error.message || 'Internal server error' });
   }
 });
 

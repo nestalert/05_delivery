@@ -36,12 +36,12 @@ function CreateAccountPage() {
     };
 
     try {
-      const response = await fetch('http://localhost:8080/users/create/' + JSON.stringify(userData), {
+      const response = await fetch('http://localhost:8080/newuser/' + JSON.stringify(userData), {
         method: 'POST'
       });
 
       if (response.ok) {
-        navigate('/order', { state: { username } });
+        navigate('/login', { state: { username } });
       } else {
         console.error('Error creating account:', response.statusText);
       }

@@ -28,9 +28,11 @@ function LoginPage() {
       }
       else {
         const data = await response.json();
-        console.log(data.token);
         localStorage.setItem('token', data.token);
+        localStorage.setItem('role', data.role);
+        setTimeout(() => {
         navigate('/order', { state: { username } });
+        }, 2000);
       }
     } catch (error) {
       console.error('Error fetching user:', error);
