@@ -30,9 +30,19 @@ function LoginPage() {
         const data = await response.json();
         localStorage.setItem('token', data.token);
         localStorage.setItem('role', data.role);
-        setTimeout(() => {
-        navigate('/order', { state: { username } });
-        }, 2000);
+        localStorage.setItem('uid',data.uid);
+      
+        switch (data.role) {
+          case "KITCHEN":
+            navigate('/kitchen');
+            break;
+          case "DELIVERER":
+            navigate('/deliverer');
+            break;
+          default: // Default to CUSTOMER
+            navigate('/customer');
+            break;
+        }
       }
     } catch (error) {
       console.error('Error fetching user:', error);

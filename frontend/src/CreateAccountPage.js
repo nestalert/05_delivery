@@ -37,7 +37,10 @@ function CreateAccountPage() {
 
     try {
       const response = await fetch('http://localhost:8080/newuser/' + JSON.stringify(userData), {
-        method: 'POST'
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
       });
 
       if (response.ok) {

@@ -8,7 +8,6 @@ function RestaurantDropdown() {
 
   useEffect(() => {
     const fetchData = async () => {
-      console.log(token);
       const response = await fetch(`http://localhost:8080/menu/`, {
         headers: {
             Authorization: `Bearer ${token}`

@@ -5,6 +5,8 @@ import HomePage from './HomePage';
 import LoginPage from './LoginPage';
 import CreateAccountPage from './CreateAccountPage';
 import OrderPage from './OrderPage';
+import CustomerPage from './CustomerPage';
+import ModifyPage from './ModifyPage';
 
 function App() {
   return (
@@ -15,6 +17,8 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/create-account" element={<CreateAccountPage />} />
           <Route path="/order" element={<OrderPage />} />
+          <Route path="/customer" element={<CustomerPage />} />
+          <Route path="/modify" element={<ModifyPage />} />
         </Routes>
       </div>
     </Router>

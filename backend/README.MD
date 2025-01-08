@@ -5,7 +5,7 @@ API:
 
 GET (login/:username/:password): Checks if user exists, then sends back a verification token and role. This is the only API you can call without a token.
 
-GET (/users/:username/:password): Checks if user exists, then sends all user data to the server. Note: password needs to be encrypted with SHA256.
+GET (/users/:uid): Checks if user exists, then sends all user data to the server.
 
 POST (/users/create/:json): Accepts JSON with UNAME, PWD, EMAIL, ADDR, ROLE, and BANK_TOKEN, and creates user. Sends data of new user back if successful. Note: Method checks for correct role because I had to kill the enum at the database. Nevertheless, you should NOT be sending invalid roles to the API. PWD should be encrypted with SHA256.
 

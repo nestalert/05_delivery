@@ -8,24 +8,23 @@ const prisma = new PrismaClient();
 const router = express.Router();
 router.use(token);
 
-router.get('/:username/:password', async (req, res) => {
-    const { username,password } = req.params;
-    console.log("> Requested: " + username);
+router.get('/:uid/', async (req, res) => {
+    const { uid } = req.params;
+    console.log("> Requested: " + uid);
     try {
       const user = await prisma.users.findFirst({
           where: {
-              UNAME: username,
-              PWD: password,
+              UID: parseInt(uid)
             },
       });
   
       if (!user) {
-        console.log("> Rejected: " + username);
+        console.log("> Rejected: " + uid);
         return res.status(404).json({error: 'Incorrect username or password' });
       }
   
       res.json(user);
-      console.log("> Validated: " + username);
+      console.log("> Validated: " + user.UNAME);
     } catch (error) {
       console.error(error);
       res.status(500).json({ error:  
@@ -36,16 +35,14 @@ router.get('/:username/:password', async (req, res) => {
   router.patch('/update/:uid/:json', async (req, res) => {
     const { uid, json } = req.params;
   
-    console.log(`> Attempting to update user with ID: ${uid}`);
+    console.log(`> Attempting to update user with UID: ${uid}`);
   
     try {
       const userData = JSON.parse(json);
-  
-      // Optional: Include checks for allowed fields to update (e.g., username, email, etc.)
-      const { username, email, address, role} = userData; // Modify as needed
+
   
       // Convert role to uppercase before checking (if applicable)
-      const uppercaseRole = role ? role.toUpperCase() : undefined;
+      const uppercaseRole = userData.ROLE ? userData.ROLE.toUpperCase() : undefined;
   
       // Check if role is valid (if applicable)
       if (uppercaseRole && !["CUSTOMER", "DELIVERER", "KITCHEN"].includes(uppercaseRole)) {
@@ -54,21 +51,22 @@ router.get('/:username/:password', async (req, res) => {
   
       // Build update object with only the provided fields
       const updateData = {};
-      if (username) updateData.UNAME = username;
-      if (email) updateData.EMAIL = email;
-      if (address) updateData.ADDR = address;
+      if (userData.UNAME) updateData.UNAME = userData.UNAME;
+      if (userData.PWD) updateData.PWD = userData.PWD;
+      if (userData.EMAIL) updateData.EMAIL = userData.EMAIL;
+      if (userData.ADDR) updateData.ADDR = userData.ADDR;
       if (uppercaseRole) updateData.ROLE = uppercaseRole;
   
       const updatedUser = await prisma.users.update({
         where: {
-          ID: parseInt(uid), // Ensure uid is converted to an integer
+          UID: parseInt(uid), // Ensure uid is converted to an integer
         },
         data: updateData,
       });
   
       if (updatedUser) {
         res.json(updatedUser);
-        console.log(`> User with ID ${uid} updated`);
+        console.log(`> User with UID ${uid} updated`);
       } else {
         res.status(404).json({ error: 'User not found' });
       }

@@ -41,7 +41,7 @@ app.get('/login/:username/:password', async (req, res) => {
       }
 
       const token = generateToken(user.UID); // Generate token using user's ID
-      res.json({ token, role: user.ROLE });
+      res.json({ token, role: user.ROLE, uid: user.UID });
       console.log('> Logging in '+ user.UNAME + '...');
   } catch (error) {
       console.error(error);
