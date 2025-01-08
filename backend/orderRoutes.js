@@ -55,8 +55,15 @@ router.get('/:choice/:uid', async (req, res) => {
           const orders = await prisma.orders.findMany({
               where: whereClause,
           });
-          console.log("> Found order(s)")
-          res.json(orders);
+      if(!orders)
+      {
+        console.log(">No orders")
+      }
+      else
+      {
+      console.log("> Found order(s)")
+      res.json(orders);
+      }
       } catch (error) {
           console.error('Error fetching orders:', error);
           res.status(500).json({ error: 'Failed to fetch orders' });

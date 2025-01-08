@@ -63,6 +63,7 @@ const ModifyPage = () => {
     
         // Handle successful update (e.g., display a success message)
         console.log('User data updated successfully!');
+
       } catch (error) {
         console.error('Error updating user data:', error);
         // Handle error (e.g., display an error message to the user)
