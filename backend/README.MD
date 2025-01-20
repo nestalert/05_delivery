@@ -17,13 +17,19 @@ GET (/menu/): Returns UID and UNAME of users where role is Kitchen.
 GET (/menu/:kitchen): Returns all items in table menu where menu.UID = users.UID where uname = kitchen. Will return blank if user with no menu is selected.
 
 
-GET (/orders/:choice/:uid): Sends orders from the ORDER table, according to this logic:
+GET (/order/:choice/:uid): Sends orders from the ORDER table, according to this logic:
 :choice determines which uid needs to match with the :uid sent.
 0 (default) ORDER_ID
 1 CUSTOMER_ID 
 2 KITCHEN_ID
 3 DELIVERER_ID
 
-POST (/orders/create/:json): Creates order. Takes values customer_id,kitchen_id,deliverer_id,total_amount. order_id, date and status are filled automatically by the database.
+POST (/order/create/:json): Creates order. Takes values customer_id,kitchen_id,deliverer_id,total_amount. order_id, date and status are filled automatically by the database.
 
-DELETE (/orders/delete/:uid): Deletes the order with ORDER_ID = uid.
+DELETE (/order/delete/:uid): Deletes the order with ORDER_ID = uid.
+
+GET (/order/options/): Shows PENDING orders.
+
+
+GET (/deliverer/)
+

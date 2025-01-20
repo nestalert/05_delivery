@@ -6,7 +6,8 @@ const config = require('./config');
 const middleware = require('./middleware');
 const orderRoutes = require('./orderRoutes');
 const menuRoutes = require('./menuRoutes');
-const userRoutes = require('./userRoutes')
+const userRoutes = require('./userRoutes');
+const delivererRoutes = require('./delivererRoutes');
 
 const prisma = new PrismaClient();  
 const app = express();
@@ -19,6 +20,7 @@ app.use(middleware.bodyParserMiddleware);
 app.use('/order', orderRoutes);
 app.use('/menu', menuRoutes);
 app.use('/users', userRoutes);
+app.use('/deliverers', delivererRoutes);
 
 const generateToken = (id) => {
   return jwt.sign({ userId: id }, secretKey, { expiresIn: '4h' });

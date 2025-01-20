@@ -9,7 +9,6 @@ const router = express.Router();
 router.use(token);
 
 router.get('/', async (req, res) => {
-    const { kitchen } = req.params;
     console.log("> Listing restaurants...");
     try {
       const menu = await prisma.users.findMany({

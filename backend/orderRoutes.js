@@ -85,12 +85,12 @@ router.get('/options/', async (req, res) => {
   }
   });
 
-router.post('/create/:json', async (req, res) => {
+router.post('/create/', async (req, res) => {
     const { json } = req.params;
     console.log("> Attempted creation of order");
     try {
       const userData = JSON.parse(json);
-      const {customer_id,kitchen_id,deliverer_id,total_amount } = userData;
+      const { customer_id, kitchen_id, deliverer_id, total_amount } = req.body;
   
        const newOrder = await prisma.orders.create({
         data: {
