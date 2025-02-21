@@ -1,6 +1,6 @@
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const jwt = require('jsonwebtoken'); // Assuming you have JWT setup
+const jwt = require('jsonwebtoken');
 
 const secretKey = 'd1acb9602970513209590380d15c33f42a7728d9395c775bc571c9d6bc49850c';
 
