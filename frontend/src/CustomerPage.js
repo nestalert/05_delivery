@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
+import './CustomerPage.css';
 
-function HomePage() {
+function DeliveryPage() {
   const navigate = useNavigate();
 
   const handlePlaceOrder = () => {
@@ -12,12 +13,12 @@ function HomePage() {
   };
 
   return (
-    <div>
-      <h1>Welcome to the Home Page</h1>
+    <div className="container">
+      <h1>Welcome to the Delivery Page</h1>
       <button onClick={handlePlaceOrder}>Place Order</button>
       <button onClick={handleModifyInformation}>Modify Information</button>
     </div>
   );
 }
 
-export default HomePage;
+export default DeliveryPage;
