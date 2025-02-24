@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import './OrderPage.css';
 
 const token = localStorage.getItem('token');
 const customerUID = localStorage.getItem('uid');
@@ -7,9 +8,9 @@ function RestaurantDropdown() {
   const [restaurants, setRestaurants] = useState([]);
   const [selectedRestaurant, setSelectedRestaurant] = useState(null);
   const [restaurantMenu, setRestaurantMenu] = useState(null);
-  const [cartItems, setCartItems] = useState([]); // Add state to store cart items
-  const [kitchenID, setKitchenID] = useState(null); // Add state to store kitchen ID
-  const [delivererID, setDelivererID] = useState(null); // Add state to store deliverer ID
+  const [cartItems, setCartItems] = useState([]);
+  const [kitchenID, setKitchenID] = useState(null);
+  const [delivererID, setDelivererID] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -28,9 +29,9 @@ function RestaurantDropdown() {
   const handleSelect = (event) => {
     const selectedRestaurant = restaurants.find(restaurant => restaurant.UNAME === event.target.value);
     setSelectedRestaurant(event.target.value);
-    setRestaurantMenu(null); // Reset menu when a new restaurant is selected
-    setCartItems([]); // Reset cart items when a new restaurant is selected
-    setKitchenID(selectedRestaurant.UID); // Update kitchen ID based on selected restaurant
+    setRestaurantMenu(null);
+    setCartItems([]);
+    setKitchenID(selectedRestaurant.UID);
   };
 
   const handleSubmit = async () => {
@@ -49,35 +50,12 @@ function RestaurantDropdown() {
     setCartItems((prevItems) => [...prevItems, menuItem]);
   };
 
-  // Function to remove item from cart
   const removeFromCart = (menuItem) => {
     setCartItems((prevItems) => prevItems.filter((item) => item.UID !== menuItem.UID));
   };
 
-  const displayCart = () => {
-    if (cartItems.length > 0) {
-      return (
-        <div>
-          <h3>Cart Items</h3>
-          <ul>
-            {cartItems.map((menuItem) => (
-              <li key={menuItem.UID}>
-                {menuItem.FOOD_NAME} - {menuItem.PRICE}
-                <button onClick={() => removeFromCart(menuItem)}>Remove</button>
-              </li>
-            ))}
-          </ul>
-        </div>
-      );
-    } else {
-      return <p>Your cart is empty.</p>;
-    }
-  };
-
   const calculateTotalAmount = () => {
-    let total = 0;
-    cartItems.forEach((item) => (total += parseFloat(item.PRICE)));
-    return total;
+    return cartItems.reduce((total, item) => total + parseFloat(item.PRICE), 0);
   };
 
   const finalizeOrder = async () => {
@@ -87,15 +65,22 @@ function RestaurantDropdown() {
       },
     });
     const data = await response.json();
-    const firstDeliverer = data[0].UID;
-    setDelivererID(firstDeliverer);
+    setDelivererID(data[0]?.UID || null);
+
+    if (!delivererID) {
+      console.error("No deliverer found!");
+      return;
+    }
+
+    const totalCost = calculateTotalAmount().toFixed(2);
+
     const order = {
       customer_id: parseInt(customerUID),
       kitchen_id: kitchenID,
       deliverer_id: delivererID,
-      total_amount: calculateTotalAmount(),
+      total_amount: totalCost,
     };
-    console.log(JSON.stringify(order));
+
     const createOrderResponse = await fetch(`http://localhost:8080/order/create/`, {
       method: 'POST',
       headers: {
@@ -106,43 +91,58 @@ function RestaurantDropdown() {
     });
 
     if (createOrderResponse.ok) {
-      // Handle successful order creation (e.g., display success message)
+      alert(`Thank you for your order! Your total cost is $${totalCost}`);
       console.log("Order created successfully!");
     } else {
-      // Handle error (e.g., display error message)
       console.error("Error creating order:", await createOrderResponse.text());
     }
   };
 
   return (
-    <div>
-      <h2>Select Restaurant</h2>
-      <select onChange={handleSelect}>
-        <option value="">-- Select Restaurant --</option>
-        {restaurants.map((restaurant) => (
-          <option key={restaurant.UID} value={restaurant.UNAME}>
-            {restaurant.UNAME}
-          </option>
-        ))}
-      </select>
-      <button onClick={handleSubmit}>Submit</button>
-
-      {/* Conditionally render the restaurant menu */}
-      {restaurantMenu && (
-        <div>
-          <h3>Menu</h3>
-          {restaurantMenu.map((menuItem) => (
-            <div key={menuItem.UID}>
-              {menuItem.FOOD_NAME} - {menuItem.PRICE}
-              <button onClick={() => addToCart(menuItem)}>Add to Cart</button>
-            </div>
+    <div className="order-container">
+      <div className="order-box">
+        <h2>Select Restaurant</h2>
+        <select onChange={handleSelect}>
+          <option value="">-- Select Restaurant --</option>
+          {restaurants.map((restaurant) => (
+            <option key={restaurant.UID} value={restaurant.UNAME}>
+              {restaurant.UNAME}
+            </option>
           ))}
+        </select>
+        <button onClick={handleSubmit}>Submit</button>
+
+        {restaurantMenu && (
+          <div className="menu-section">
+            <h3>Menu</h3>
+            {restaurantMenu.map((menuItem) => (
+              <div className="menu-item" key={menuItem.UID}>
+                {menuItem.FOOD_NAME} - ${menuItem.PRICE}
+                <button onClick={() => addToCart(menuItem)}>Add to Cart</button>
+              </div>
+            ))}
+          </div>
+        )}
+
+        <div className="cart-section">
+          <h3>Cart</h3>
+          {cartItems.length > 0 ? (
+            <ul>
+              {cartItems.map((menuItem) => (
+                <li key={menuItem.UID}>
+                  {menuItem.FOOD_NAME} - ${menuItem.PRICE}
+                  <button className="remove" onClick={() => removeFromCart(menuItem)}>Remove</button>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>Your cart is empty.</p>
+          )}
         </div>
-      )}
 
-      {displayCart()}
-
-      <button onClick={finalizeOrder}>Finalize Order</button>
+        <h3 className="total">Total: ${calculateTotalAmount().toFixed(2)}</h3>
+        <button onClick={finalizeOrder}>Finalize Order</button>
+      </div>
     </div>
   );
 }
