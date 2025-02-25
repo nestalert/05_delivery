@@ -75,6 +75,14 @@ button.back:hover {
   background-color: #5a6268;
 }
 
+button.Home {
+  background-color: #6c757d;
+}
+
+button.Home:hover {
+  background-color: #5a6268;
+}
+
 /* Menu Section */
 .menu-section {
   margin-top: 20px;

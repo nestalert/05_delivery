@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './OrderPage.css';
 
 const token = localStorage.getItem('token');
@@ -13,6 +14,10 @@ function RestaurantDropdown() {
   const [delivererID, setDelivererID] = useState(null);
   const [orderConfirmed, setOrderConfirmed] = useState(false);
   const [totalAmount, setTotalAmount] = useState(0);
+  const navigate = useNavigate();
+  const MainMenu = () => {
+    navigate('/customer');
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -150,6 +155,9 @@ function RestaurantDropdown() {
           </p>
           <button className="back" onClick={resetOrder}>
             Back
+          </button>
+          <button className="Home" onClick={resetOrder && MainMenu}>
+          Home
           </button>
         </div>
       ) : (
