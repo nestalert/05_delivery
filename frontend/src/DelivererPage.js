@@ -46,16 +46,29 @@ function DelivererPage() {
 
   return (
     <div className="Deliverer-Page">
-      <h2>My Orders</h2>
+      <h4>My Orders</h4>
       <ul>
-        {orders.map((order) => (
-          <li key={order.ORDER_ID}> 
-            <p>Order ID: {order.ORDER_ID}</p>
-            <p>Order Date: {order.ORDER_DATE}</p>
-            <p>Status: {order.STATUS}</p>
-            <p>Total Amount: {order.TOTAL_AMOUNT}</p>
-          </li>
-        ))}
+        {orders.map((order) => {
+          const orderDate = new Date(order.ORDER_DATE);
+          const formattedDate = orderDate.toLocaleString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            timeZoneName: 'short'
+          });
+
+          return (
+            <li key={order.ORDER_ID}> 
+              <p>Order ID: {order.ORDER_ID}</p>
+              <p>Order Date: {formattedDate}</p>
+              <p>Status: {order.STATUS}</p>
+              <p>Total Amount: {order.TOTAL_AMOUNT}</p>
+            </li>
+          );
+        })}
       </ul>
       <button onClick={() => navigate('/login')} className="back-button">
         Back
