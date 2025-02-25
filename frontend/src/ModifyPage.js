@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import './ModifyPage.css';
 import CryptoJS from 'crypto-js';
 
 const ModifyPage = () => {
@@ -70,7 +71,7 @@ const ModifyPage = () => {
       }
     };
   return (
-    <div>
+    <div className="Modify-Page">
       <h2>Modify Account</h2>
       <form onSubmit={handleSubmit}>
         <label htmlFor="UNAME">Username:</label>

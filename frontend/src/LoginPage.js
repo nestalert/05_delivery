@@ -79,10 +79,11 @@ function LoginPage() {
         </label> 
         {errorMessage && <p className="error-message">{errorMessage}</p>}
         <button type="submit">Login</button>
+        <button onClick={() => navigate('/')} className="back-button">
+          Back
+        </button>
       </form>
-      <button onClick={() => navigate('/')} className="back-button">
-        Back
-      </button>
+      
     </div>
   );
 }

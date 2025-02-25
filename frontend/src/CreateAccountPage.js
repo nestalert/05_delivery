@@ -127,10 +127,11 @@ function CreateAccountPage() {
         </label>
         <p>A bank token will be generated automatically.</p>
         <button type="submit">Create Account</button>
+        <button onClick={() => navigate('/')} className="back-button">
+          Back
+        </button>
       </form>
-      <button onClick={() => navigate('/')} className="back-button">
-        Back
-      </button>
+      
     </div>
   );
 }

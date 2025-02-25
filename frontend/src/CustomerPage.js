@@ -17,6 +17,9 @@ function DeliveryPage() {
       <h1>Welcome to the Delivery Page</h1>
       <button onClick={handlePlaceOrder}>Place Order</button>
       <button onClick={handleModifyInformation}>Modify Information</button>
+      <button onClick={() => navigate('/login')} className="back-button">
+          Back
+      </button>
     </div>
   );
 }
