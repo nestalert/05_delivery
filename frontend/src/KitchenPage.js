@@ -9,12 +9,12 @@ function KitchenPage() {
   const [restaurantMenu, setRestaurantMenu] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [selectedItem, setSelectedItem] = useState(null);
 
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
-
       try {
         const response = await fetch(`http://localhost:8080/menu/Joes_Souvlaki`, {
           method: 'GET',
@@ -23,15 +23,13 @@ function KitchenPage() {
           },
         });
 
-        // Ελέγχουμε την απάντηση του API
         console.log('API Response Status:', response.status);
         
         if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`+uid);
+          throw new Error(`HTTP error! status: ${response.status} ` + uid);
         }
 
         const data = await response.json();
-        
 
         if (Array.isArray(data)) {
           setRestaurantMenu(data);
@@ -49,26 +47,39 @@ function KitchenPage() {
     fetchData();
   }, []);
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+  const toggleAllergens = (menuId) => {
+    setSelectedItem(selectedItem === menuId ? null : menuId);
+  };
 
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
-
-  if (!restaurantMenu || restaurantMenu.length === 0) {
-    return <div>No menu items available.</div>;
-  }
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
+  if (!restaurantMenu || restaurantMenu.length === 0) return <div>No menu items available.</div>;
 
   return (
     <div className="kitchen-container">
-      <h2>Menu</h2>
+      <h4>Menu</h4>
       <div className="menu-section">
         {restaurantMenu.map((item) => (
           <div key={item.MENU_ID} className="menu-item">
-            <span>{item.FOOD_NAME} - ${item.PRICE}</span>
-            {item.FOOD_ALLERGENS && <p><strong>Allergens:</strong> {item.FOOD_ALLERGENS}</p>}
+            {/* Food name & price - Make sure it's on its own line */}
+            <div 
+              onClick={() => toggleAllergens(item.MENU_ID)} 
+              style={{ 
+                cursor: "pointer", 
+                padding: "20px", 
+                borderBottom: "2px solid #ddd", 
+                display: "block"
+              }}
+            >
+              {item.FOOD_NAME} : ${item.PRICE}
+            </div>
+            
+            {/* Allergens below the food name */}
+            {selectedItem === item.MENU_ID && item.FOOD_ALLERGENS && (
+              <div style={{ marginTop: "5px", fontSize: "14px", color: "#d9534f" }}>
+                <strong>Allergens:</strong> {item.FOOD_ALLERGENS}
+              </div>
+            )}
           </div>
         ))}
       </div>

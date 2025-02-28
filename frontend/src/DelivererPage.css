@@ -1,8 +1,9 @@
 .Deliverer-Page {
     text-align: center;
+    border-radius: 50px;
     padding: 50px;
     font-family: 'Georgia', serif;
-    background-color: rgba(255, 255, 255, 0.5);
+    background-color: rgba(255, 255, 255, 0.7);
   }
   
   h4 {
@@ -51,6 +52,12 @@
     color: white;
   }
 
+  .back-button:hover {
+    margin-top: 20px;
+    background-color: #a40f1e;
+    color: white;
+  }
+  
   ::-webkit-scrollbar {
     width: 1vw;
   }

@@ -1,6 +1,7 @@
 /* Order Page Container */
 .order-container {
   font-family: 'Arial', sans-serif;
+  border-radius: 25px;
   padding: 20px;
   text-align: center;
   background-color: rgb(255, 255, 255,0.8);
@@ -72,7 +73,7 @@ button.back {
 }
 
 button.back:hover {
-  background-color: #5a6268;
+  background-color: #ad0808;
 }
 
 button.Home {
@@ -80,7 +81,7 @@ button.Home {
 }
 
 button.Home:hover {
-  background-color: #5a6268;
+  background-color: #01a00b;
 }
 
 /* Menu Section */
