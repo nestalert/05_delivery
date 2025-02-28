@@ -63,4 +63,29 @@ router.get('/:kitchen', async (req, res) => {
    'Internal server error' });
     }
   });
+
+  router.get('/:uid', async (req, res) => {
+    const { uid } = req.params;
+    console.log("> Sending menu of kitchen : " + uid);
+    try {
+      
+        
+        const Kmenu = await prisma.menu.findMany({
+          where: {
+              UID: parseInt(uid),
+            },
+      })
+      res.json(Kmenu);
+      if (!Kmenu) {
+        console.log("> Rejected: " + username);
+        return res.status(404).json({error: 'Incorrect username or password' });
+      }
+      
+      console.log("> Found menu: " + uid);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error:  
+   'Internal server error' });
+    }
+  });
  module.exports = router;
