@@ -180,7 +180,7 @@ function RestaurantDropdown() {
                 const key = buildKey(menuItem);
                 // Determine current quantity in cart (if any) for this particular menu item.
                 const currentQuantity =
-                  cartItems.find((item) => item.key === key)?.quantity || 1;
+                  cartItems.find((item) => item.key === key)?.quantity || 0;
                 return (
                   <div key={key} className="menu-item">
                     <span>

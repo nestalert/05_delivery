@@ -1,0 +1,62 @@
+.Kitchen-Page {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  background-color: #f9f9f9;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.h4 {
+  font-size: 2rem;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.ul {
+  list-style-type: none;
+  padding: 0;
+  width: 80%;
+  max-width: 600px;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.ul li {
+  background-color: #fff;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.2rem;
+  color: #333;
+}
+
+.ul li span {
+  font-weight: bold;
+}
+
+.back-button {
+  margin-top: 30px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.back-button:hover {
+  background-color: #0056b3;
+}
+
+div {
+  font-size: 1.2rem;
+  color: #666;
+  text-align: center;
+}
