@@ -11,7 +11,6 @@ function RestaurantDropdown() {
   const [restaurantMenu, setRestaurantMenu] = useState(null);
   const [cartItems, setCartItems] = useState([]);
   const [kitchenID, setKitchenID] = useState(null);
-  const [delivererID, setDelivererID] = useState(null);
   const [orderConfirmed, setOrderConfirmed] = useState(false);
   const [totalAmount, setTotalAmount] = useState(0);
   const navigate = useNavigate();
@@ -109,8 +108,11 @@ function RestaurantDropdown() {
       },
     });
     const data = await response.json();
-    const firstDeliverer = data[0]?.UID;
-    setDelivererID(firstDeliverer);
+    const randomIndex = Math.floor(Math.random() * (data.length));
+    console.log("Data length:", data.length);
+    console.log("Random index:", randomIndex);
+    const firstDelivererData = data[randomIndex];
+    const firstDeliverer = firstDelivererData.UID;
 
     const order = {
       customer_id: parseInt(customerUID),

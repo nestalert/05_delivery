@@ -23,14 +23,7 @@ router.get('/', async (req, res) => {
     const endOfHour = new Date(startOfHour);
     endOfHour.setHours(endOfHour.getHours() + 1); 
 
-    const deliverers = await prisma.deliverers.findMany({
-      where: {
-        AND: [
-          { START_HOUR: { lte: endOfHour } }, 
-          { END_HOUR: { gte: startOfHour } }
-        ]
-      }
-    });
+    const deliverers = await prisma.deliverers.findMany();
 
     res.json(deliverers); 
   } catch (error) {

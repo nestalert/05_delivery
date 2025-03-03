@@ -64,12 +64,10 @@ router.get('/:kitchen', async (req, res) => {
     }
   });
 
-  router.get('/:uid', async (req, res) => {
+  router.get('/withuid/:uid', async (req, res) => {
     const { uid } = req.params;
     console.log("> Sending menu of kitchen : " + uid);
     try {
-      
-        
         const Kmenu = await prisma.menu.findMany({
           where: {
               UID: parseInt(uid),

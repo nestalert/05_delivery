@@ -16,7 +16,7 @@ function KitchenPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`http://localhost:8080/menu/` + parseInt(uid), {
+        const response = await fetch(`http://localhost:8080/menu/withuid/${uid}`, {
           method: 'GET',
           headers: {
             Authorization: `Bearer ${token}`
