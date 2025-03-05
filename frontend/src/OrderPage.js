@@ -13,6 +13,7 @@ function RestaurantDropdown() {
   const [kitchenID, setKitchenID] = useState(null);
   const [orderConfirmed, setOrderConfirmed] = useState(false);
   const [totalAmount, setTotalAmount] = useState(0);
+  const [selectedQuantities, setSelectedQuantities] = useState({});
   const navigate = useNavigate();
   const MainMenu = () => {
     navigate('/customer');
@@ -62,26 +63,43 @@ function RestaurantDropdown() {
     return `${menuItem.UID}-${menuItem.FOOD_NAME}-${menuItem.PRICE}`;
   };
 
+  const incrementQuantity = (menuItem) => {
+    const key = buildKey(menuItem);
+    setSelectedQuantities((prev) => ({
+      ...prev,
+      [key]: (prev[key] || 0) + 1,
+    }));
+  };
+
   const addToCart = (menuItem) => {
     const key = buildKey(menuItem);
+    const quantity = selectedQuantities[key] || 0; //Selected quality
+  
+    if (quantity === 0) return;
+  
     setCartItems((prevItems) => {
       const existingItem = prevItems.find((item) => item.key === key);
       if (existingItem) {
-        // Increase quantity if exactly the same item exists
         return prevItems.map((item) =>
-          item.key === key
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
+          item.key === key ? { ...item, quantity: item.quantity + quantity } : item
         );
       } else {
-        // Add new entry if item is different
-        return [...prevItems, { ...menuItem, quantity: 1, key }];
+        return [...prevItems, { ...menuItem, quantity, key }];
       }
     });
+  
+    setSelectedQuantities((prev) => ({ ...prev, [key]: 0 })); //Reset selected quality
   };
+  
 
   const removeFromCart = (menuItem) => {
     const key = buildKey(menuItem);
+    const quantity = selectedQuantities[key] || 0;
+    setSelectedQuantities((prev) => ({
+      ...prev,
+      [key]: Math.max((prev[key] || 0) - 1, 0),
+    }));
+    if(quantity===0){
     setCartItems((prevItems) =>
       prevItems
         .map((item) =>
@@ -90,7 +108,7 @@ function RestaurantDropdown() {
             : item
         )
         .filter((item) => item.quantity > 0)
-    );
+    );}
   };
 
   const calculateTotalAmount = () => {
@@ -190,8 +208,8 @@ function RestaurantDropdown() {
                     </span>
                     <div className="quantity-controls">
                       <button onClick={() => removeFromCart(menuItem)}>-</button>
-                      <span>{currentQuantity}</span>
-                      <button onClick={() => addToCart(menuItem)}>+</button>
+                      <span>{selectedQuantities[buildKey(menuItem)] || 0}</span>
+                      <button onClick={() => incrementQuantity(menuItem)}>+</button>
                     </div>
                     <button onClick={() => addToCart(menuItem)}>Add to Cart</button>
                   </div>
