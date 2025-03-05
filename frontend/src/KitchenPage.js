@@ -96,7 +96,11 @@ function KitchenPage() {
     try {
       const response = await fetch(`http://localhost:8080/menu/delete/${menuId}`, {
         method: "DELETE",
-        headers: { Authorization: `Bearer ${token}` },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ UID: uid }),
       });
 
       if (!response.ok) throw new Error("Failed to delete item");
